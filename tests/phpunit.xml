@@ -4,6 +4,8 @@
   convertErrorsToExceptions="true"
   convertNoticesToExceptions="true"
   convertWarningsToExceptions="true"
+  backupGlobals="false"
+  processIsolation="false"
 >
   <testsuites>
     <testsuite name="Koine DbTestCase">

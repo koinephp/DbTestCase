@@ -12,6 +12,7 @@ class DbTestCaseTest extends DbTestCase
 {
     public function setUp()
     {
+        parent::setUp();
     }
 
     /**
@@ -20,5 +21,15 @@ class DbTestCaseTest extends DbTestCase
     public function extendsPhpUnitTestCase()
     {
         $this->assertInstanceOf('PHPUnit_Framework_TestCase', $this);
+    }
+
+    /**
+     * @test
+     */
+    public function canAssertTableCount()
+    {
+        $this->assertTableCount(0, 'test_table');
+        $this->insertQuery("INSERT INTO test_table values (0, 'foo', 'bar')");
+        $this->assertTableCount(1, 'test_table');
     }
 }
