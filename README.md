@@ -23,7 +23,87 @@ Package information:
 
 ### Usage
 
+### Db Test Case
+
+In your bootstrap file set up the connection
+
+```php
+// tests/bootstrap.php
+
+// [...]
+
+\Koine\PHPUnit\DbTestCase::setConnection($pdoConnection);
+```
+
+```php
+namespace MyAppTest;
+
+use Koine\PHPUnit\DbTestCase;
+use MyApp\BlogService;
+
+/**
+ * @author Marcelo Jacobus <marcelo.jacobus@gmail.com>
+ */
+class DbTestCaseTest extends DbTestCase
+{
+    public function setUp()
+    {
+        parent::setUp(); // enclose everything in a transaction
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown(); // rollback the transaction
+    }
+
+    /**
+     * @test
+     */
+    public function canCreatePost()
+    {
+        $service = new BlogService($this->getConnection());
+
+        $service->create(array(
+            'title' => 'some title',
+            'body'  => 'some body',
+        ));
+
+        $this->assertTableCount(1, 'blog_post');
+    }
+
+    /**
+     * @test
+     */
+    public function canFindByCategory()
+    {
+        $helper = $this->createTableHelper('blog_post');
+
+        $helper->insert(array(
+            'title'      => 'foo',
+            'body'       => 'bar',
+            'categoryId' => 1,
+        ));
+
+        $helper->insert(array(
+            'title'      => 'foo',
+            'body'       => 'bar',
+            'categoryId' => 2,
+        ));
+
+        $service = new BlogService($this->getConnection());
+        $records = $service->findByCategoryId(1);
+
+        $this->assertEquals(1, count($records));
+    }
+}
+```
+
+
+
 ### Table Helper
+
+Table helper is a very simple ORM for creating records for test, updating and
+querying a single table.
 
 Setting up
 
@@ -53,7 +133,7 @@ $post = $tableHelper->find(10);
 Crating records
 
 ```php
-$tableHelper->create(array(
+$tableHelper->insert(array(
   'title' => 'First blog',
   'body'  => 'Post body',
 ));
