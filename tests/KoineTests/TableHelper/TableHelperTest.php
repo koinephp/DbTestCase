@@ -86,7 +86,8 @@ class TableHelperTest extends DbTestCase
             'value' => 'someValue',
         ));
 
-        $id = $this->getRecords(array())[0]['id'];
+        $records = $this->getRecords(array());
+        $id = $records[0]['id'];
 
         $expected = array(
             'id'    => $id,
@@ -161,7 +162,8 @@ class TableHelperTest extends DbTestCase
             'value' => 'someValue',
         ));
 
-        $id = $this->getRecords(array())[0]['id'];
+        $records = $this->getRecords(array());
+        $id = $records[0]['id'];
 
         $this->object->update($id, array(
             'name'  => 'updated name',
