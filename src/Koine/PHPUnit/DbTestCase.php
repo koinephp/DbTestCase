@@ -2,6 +2,7 @@
 
 namespace Koine\PHPUnit;
 
+use Koine\TableHelper\TableHelper;
 use PDO;
 use PHPUnit_Framework_TestCase;
 
@@ -48,8 +49,17 @@ class DbTestCase extends PHPUnit_Framework_TestCase
      */
     public function getNumberOfTableRows($tableName)
     {
-        $records = $this->selectQuery("SELECT count(*) as count FROM $tableName");
-        return (int) $records[0]['count'];
+        return $this->createTableHelper($tableName)->getNumberOfRows();
+    }
+
+    /**
+     * @param string $tableName
+     *
+     * @return TableHelper
+     */
+    private function createTableHelper($tableName)
+    {
+        return new TableHelper($this->getConnection(), $tableName);
     }
 
     /**
