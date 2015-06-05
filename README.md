@@ -8,7 +8,7 @@ Base class for testing database with PDO
 Code information:
 
 [![Build Status](https://travis-ci.org/koinephp/DbTestCase.png?branch=master)](https://travis-ci.org/koinephp/DbTestCase)
-[![Coverage Status](https://coveralls.io/repos/koinephp/DbTestCase/badge.png?branch=master)](https://coveralls.io/r/koinephp/DbTestCase?branch=master)
+[![Coverage Status](https://coveralls.io/repos/koinephp/DbTestCase/badge.svg?branch=master)](https://coveralls.io/r/koinephp/DbTestCase?branch=master)
 [![Code Climate](https://codeclimate.com/github/koinephp/DbTestCase.png)](https://codeclimate.com/github/koinephp/DbTestCase)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/koinephp/DbTestCase/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/koinephp/DbTestCase/?branch=master)
 
