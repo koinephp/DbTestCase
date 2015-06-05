@@ -77,6 +77,29 @@ class TableHelperTest extends DbTestCase
     }
 
     /**
+     * @test
+     */
+    public function canFindRecords()
+    {
+        $this->object->insert(array(
+            'name'  => 'someName',
+            'value' => 'someValue',
+        ));
+
+        $id = $this->getRecords(array())[0]['id'];
+
+        $expected = array(
+            'id'  => $id,
+            'name'  => 'someName',
+            'value' => 'someValue',
+        );
+
+        $record = $this->object->find($id);
+
+        $this->assertEquals($expected, $record);
+    }
+
+    /**
      * @return array
      */
     private function getRecords($columns = array('name', 'value'))

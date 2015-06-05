@@ -82,7 +82,7 @@ class TableHelper
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->execute($params);
 
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -114,9 +114,47 @@ class TableHelper
         $placeholders = array();
 
         foreach ($columns as $column) {
-            $placeholders[] = ":$column";
+            $placeholders[$column] = ":$column";
         }
 
         return $placeholders;
+    }
+
+    /**
+     * @param int $value
+     *
+     * @return array
+     */
+    public function find($id)
+    {
+        $resultSet = $this->findAllBy(array(
+            $this->getIdColumn() => $id,
+        ));
+
+        return $resultSet[0];
+    }
+
+    /**
+     * @param array $conditions
+     *
+     * @return array
+     */
+    public function findAllBy(array $conditions = array())
+    {
+        $sql = sprintf('SELECT * FROM %s', $this->getTableName());
+
+        $placeholders = $this->columnsToPlaceholders(array_keys($conditions));
+
+        $conditionsAsString = '';
+
+        foreach ($placeholders as $column => $placeholder) {
+            $conditionsAsString .= "$column = $placeholder";
+        }
+
+        $where = sprintf('WHERE %s', $conditionsAsString);
+
+        $sql .=  " $where";
+
+        return $this->selectQuery($sql, $conditions);
     }
 }
