@@ -1,7 +1,7 @@
 Koine DbTestCase
 -----------------
 
-Base class for testing database with PDO
+Base class for testing database with PDO. Tested only against MySql.
 
 **Work in progress**
 
