@@ -23,7 +23,7 @@ Package information:
 
 ### Usage
 
-### Db Test Case
+#### Db Test Case
 
 In your bootstrap file set up the connection
 
@@ -100,7 +100,7 @@ class DbTestCaseTest extends DbTestCase
 
 
 
-### Table Helper
+#### Table Helper
 
 Table helper is a very simple ORM for creating records for test, updating and
 querying a single table.
