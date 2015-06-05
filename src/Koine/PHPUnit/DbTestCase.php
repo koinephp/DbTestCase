@@ -73,7 +73,7 @@ class DbTestCase extends PHPUnit_Framework_TestCase
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->execute($params);
 
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**

@@ -20,25 +20,20 @@ class TableHelper
     private $tableName;
 
     /**
-     * @param PDO    $connection
-     * @param string $tableName
+     * @var string
      */
-    public function __construct(PDO $connection, $tableName)
-    {
-        $this->setConnection($connection);
-        $this->setTableName($tableName);
-    }
+    private $idColumn;
 
     /**
-     * @param PDO $connection
-     *
-     * @return self
+     * @param PDO    $connection
+     * @param string $tableName
+     * @param string $idColumn
      */
-    public function setConnection(PDO $connection)
+    public function __construct(PDO $connection, $tableName, $idColumn = 'id')
     {
         $this->connection = $connection;
-
-        return $this;
+        $this->tableName = (string) $tableName;
+        $this->idColumn = (string) $idColumn;
     }
 
     /**
@@ -50,23 +45,19 @@ class TableHelper
     }
 
     /**
-     * @param string $tableName
-     *
-     * @return self
-     */
-    public function setTableName($tableName)
-    {
-        $this->tableName = (string) $tableName;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getTableName()
     {
         return $this->tableName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdColumn()
+    {
+        return $this->idColumn;
     }
 
     /**
@@ -92,5 +83,40 @@ class TableHelper
         $stmt->execute($params);
 
         return $stmt->fetchAll();
+    }
+
+    /**
+     * @param array $values
+     */
+    public function insert(array $values)
+    {
+        $sql = 'INSERT INTO %s (%s) VALUES (%s)';
+        $columnNames = array_keys($values);
+        $columns = implode(', ', $columnNames);
+        $placeholders = implode(', ', $this->columnsToPlaceholders($columnNames));
+        $sql = sprintf(
+            $sql,
+            $this->getTableName(),
+            $columns,
+            $placeholders
+        );
+        $stmt = $this->getConnection()->prepare($sql);
+        $stmt->execute($values);
+    }
+
+    /**
+     * @param array $columns
+     *
+     * @return array
+     */
+    private function columnsToPlaceholders(array $columns)
+    {
+        $placeholders = array();
+
+        foreach ($columns as $column) {
+            $placeholders[] = ":$column";
+        }
+
+        return $placeholders;
     }
 }
