@@ -23,8 +23,60 @@ Package information:
 
 ### Usage
 
+### Table Helper
+
+Setting up
+
 ```php
-// TBD
+$tableName = 'blog_post';
+
+$tableHelper = new \Koine\DbTestCase\TableHelper\TableHelper(
+  $pdo,
+  $tableName,
+  'id'
+);
+```
+
+Finding records by conditions
+
+```php
+$posts = $tableHelper->findAllBy(array(
+  'categoryId' => $categoryId,
+));
+```
+
+Finding record by id
+
+```php
+$post = $tableHelper->find(10);
+```
+Crating records
+
+```php
+$tableHelper->create(array(
+  'title' => 'First blog',
+  'body'  => 'Post body',
+));
+```
+
+Updating
+
+```php
+$tableHelper->update(10, array(
+  'title' => 'new title',
+));
+```
+
+Deleting
+
+```php
+$tableHelper->delete(10);
+```
+
+Counting
+
+```php
+$tableHelper->getNumberOfRows();
 ```
 
 ### Installing
