@@ -79,7 +79,7 @@ class TableHelperTest extends DbTestCase
     /**
      * @test
      */
-    public function canFindRecords()
+    public function canFindRecordsBiId()
     {
         $this->object->insert(array(
             'name'  => 'someName',
@@ -89,7 +89,7 @@ class TableHelperTest extends DbTestCase
         $id = $this->getRecords(array())[0]['id'];
 
         $expected = array(
-            'id'  => $id,
+            'id'    => $id,
             'name'  => 'someName',
             'value' => 'someValue',
         );
@@ -97,6 +97,42 @@ class TableHelperTest extends DbTestCase
         $record = $this->object->find($id);
 
         $this->assertEquals($expected, $record);
+    }
+
+    /**
+     * @test
+     */
+    public function canFindRecordsByMultipleConditions()
+    {
+        $this->object->insert(array(
+            'name'  => 'foo',
+            'value' => 'bar',
+        ));
+        $this->object->insert(array(
+            'name'  => 'foo',
+            'value' => 'baz',
+        ));
+        $this->object->insert(array(
+            'name'  => 'baz',
+            'value' => 'foo',
+        ));
+
+        $records = $this->object->findAllBy(array(
+            'name'  => 'foo',
+            'value' => 'bar',
+        ));
+
+        $this->assertCount(1, $records);
+    }
+
+    /**
+     * @test
+     * @expectedException \DomainException
+     * @expectedExceptionMessage test_table record not found by id 0
+     */
+    public function findThrowsExceptionOnNotFound()
+    {
+        $this->object->find(0);
     }
 
     /**
@@ -113,5 +149,33 @@ class TableHelperTest extends DbTestCase
         }
 
         return $resultSet;
+    }
+
+    /**
+     * @test
+     */
+    public function canUpdateRecord()
+    {
+        $this->object->insert(array(
+            'name'  => 'someName',
+            'value' => 'someValue',
+        ));
+
+        $id = $this->getRecords(array())[0]['id'];
+
+        $this->object->update($id, array(
+            'name'  => 'updated name',
+            'value' => 'updated value',
+        ));
+
+        $expected = array(
+            'id'    => $id,
+            'name'  => 'updated name',
+            'value' => 'updated value',
+        );
+
+        $record = $this->object->find($id);
+
+        $this->assertEquals($expected, $record);
     }
 }
