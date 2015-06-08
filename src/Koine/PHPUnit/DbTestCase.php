@@ -57,7 +57,7 @@ class DbTestCase extends PHPUnit_Framework_TestCase
      *
      * @return TableHelper
      */
-    private function createTableHelper($tableName)
+    protected function createTableHelper($tableName)
     {
         return new TableHelper($this->getConnection(), $tableName);
     }
